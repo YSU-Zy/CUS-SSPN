@@ -1,0 +1,10 @@
+1. The CWRU dataset is provided by the CWRU Bearing Data Center. 
+    https://engineering.case.edu/bearingdatacenter/welcome
+
+2. The KAT bearing dataset is powered by the KAT Data Center at Paderborn University
+    https://mb.uni-paderborn.de/kat/datacenter
+    Interpretation of the dataset: Condition Monitoring of Bearing Damage in Electromechanical Drive
+    Systems by Using Motor Current Signals of Electric Motors: A Benchmark Data Set for Data-Driven     Classification
+
+3. The CRB dataset is supplied by the Institute of Engineering and Technology, Sant Longowal, India.
+    https://1drv.ms/u/s!Aqapr1km1L_91CMsLPx9BR9dNL16?e=1NhxB1
