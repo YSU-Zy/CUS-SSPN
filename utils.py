@@ -179,27 +179,24 @@ def get_HBKC_data_loader(task, num_per_class=1, split='train',shuffle = False):
 
 
 class Prototype_t:
-    def __init__(self, C=65, dim=512, m=0.5):  # 接收三个参数：C表示类别数（类别数量），dim表示原型向量的维度，m表示动量参数（momentum）。
-        self.mo_pro = torch.zeros(C, dim).cuda()  # 在初始化过程中，创建了两个存储原型向量的张量mo_pro和batch_pro，形状为(C, dim)，并将它们移动到GPU上。
+    def __init__(self, C=10, dim=512, m=0.4):
+        self.mo_pro = torch.zeros(C, dim).cuda()
         self.batch_pro = torch.zeros(C, dim).cuda()
         self.m = m
-
     @torch.no_grad()
-    def update(self, support_streamclass_proto,support_streamclass_features,support_streamclass_label,train_unlabeled_streamclass_features, episode, unl_mask, unl_pseudo_label, args,class_num,device,j,
+    def update(self, support_streamclass_proto,support_streamclass_features,support_streamclass_label,
+               train_unlabeled_streamclass_features,episode, unl_mask, unl_pseudo_label, args,class_num,device,j,
                norm=False):
         if episode < 20:
             momentum = 0
         else:
             momentum = self.m
-
         if episode <= (20 + args.warm_steps) / 2:
             for class_ in range(class_num):
                 if class_==(args.stream_n_base+j):
                     self.mo_pro[class_,:]=self.mo_pro[class_,:]*momentum+support_streamclass_proto[class_,:]*(1-momentum)
                 else:
                     self.mo_pro[class_,:]=support_streamclass_proto[class_,:]
-
-        # unlabel update
         if episode > (20 + args.warm_steps) / 2:
             lblt=support_streamclass_label[(class_num-1)*args.K_shot:].to(device)
             featt=support_streamclass_features[(class_num-1)*args.K_shot:,:].to(device)
@@ -214,7 +211,6 @@ class Prototype_t:
                         self.mo_pro[class_, :] = self.mo_pro[class_, :] * momentum + featt_i_center * (1 - momentum)
                 else:
                     self.mo_pro[class_,:]=support_streamclass_proto[class_,:]
-
         if norm:
             self.mo_pro = F.normalize(self.mo_pro)
 
